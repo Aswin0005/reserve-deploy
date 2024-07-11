@@ -39,7 +39,7 @@ const cookiesParse = async (request) => {
     }
 
     const tokenUser = await User.findOne({ _id: existingToken.user }).select(
-      '_id name email'
+      '_id name email role'
     );
     sendCookies(tokenUser, existingToken);
     return tokenUser;

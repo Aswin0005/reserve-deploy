@@ -1,0 +1,33 @@
+const mongoose = require('mongoose');
+
+const ProductSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, 'Must Provide Product name'],
+      minlength: 3,
+    },
+    description: {
+      type: String,
+      maxlength: 999,
+    },
+    pickuptime: {
+      type: String,
+      required: [true, 'Must Provide Product Pickup time'],
+    },
+    price: {
+      type: Number,
+      required: [true, 'Must Provide Price'],
+    },
+    imageurl: {
+      type: String,
+      default: 'no-image',
+    },
+  },
+  { timestamps: true }
+);
+
+const Product =
+  mongoose.models.Product || mongoose.model('Product', ProductSchema);
+
+export default Product;

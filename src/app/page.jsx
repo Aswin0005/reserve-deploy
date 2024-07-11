@@ -1,10 +1,5 @@
 'use client';
 
-
 export default function Home() {
-  return(
-     <main>
-        Home
-    </main>
-  )
+  return <main>Landing Page</main>;
 }

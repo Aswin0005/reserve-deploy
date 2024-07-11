@@ -12,18 +12,19 @@ export async function POST(request) {
   const { email, password } = await request.json();
   await dbConnect();
   if (!email || !password) {
-    throw BadRequestError('Must Provide both email and password');
+    return BadRequestError('Must Provide both email and password');
   }
-  const user = await User.findOne({ email: email }).select('_id name email')
+  const user = await User.findOne({ email: email }).select(
+    '_id name email password'
+  );
 
   if (!user) {
-    throw NotFoundError('User Not Found');
+    return NotFoundError('User Not Found');
   }
-
-  const isPasswordMatch = user.comparePassword(password);
+  const isPasswordMatch = await user.comparePassword(password);
 
   if (!isPasswordMatch) {
-    throw UnAuthorizedError('Credients in Invalid');
+    return UnAuthorizedError('Credients in Invalid');
   }
 
   const cryptoRefToken = crypto.randomBytes(40).toString('hex');
@@ -32,7 +33,7 @@ export async function POST(request) {
   const refToken = await Token.create({
     refreshToken: cryptoRefToken,
     user: user._id,
-  })
+  });
 
   //Destructure RefreshHash and UserId
   const refreshTokenUser = {

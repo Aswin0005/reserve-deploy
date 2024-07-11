@@ -3,10 +3,10 @@
 @tailwind utilities;
 
 .cart-svg{
-    background-image: url(/reserve-develop/public/cart.svg);
+    background-image: url('/cart.svg');
     background-repeat: no-repeat;
 }
 
 .search-svg{
-    background-image: url(/reserve-develop/public/search.svg);
+    background-image: url('/search.svg');
 }
