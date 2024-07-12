@@ -1,3 +1,4 @@
+'use server';
 import { NextResponse } from 'next/server';
 import { cookiesParse } from '../../../../../utils/cookies';
 import UnAuthorizedError from '../../../../../errors/unauthorizedError';
