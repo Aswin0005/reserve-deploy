@@ -15,8 +15,6 @@ export async function POST(request) {
   if (isEmail) {
     return BadRequestError('Email Already Exists');
   }
-  const isFirstUser = (await User.countDocuments({})) === 0;
-  data.role = isFirstUser ? 'admin' : 'user';
 
   const user = await User.create(data);
 

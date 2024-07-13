@@ -23,6 +23,11 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       default: 'no-image',
     },
+    restaurant: {
+      type: mongoose.Types.ObjectId,
+      ref: 'Restaurant',
+      required : true,
+    },
   },
   { timestamps: true }
 );
