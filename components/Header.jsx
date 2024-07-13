@@ -1,5 +1,6 @@
 import { ShoppingCart, Menu } from 'feather-icons-react'; 
 import Link from 'next/link';
+import { Search } from 'react-feather';
 
 function Header() {
     return (
@@ -9,7 +10,8 @@ function Header() {
 
             
             <div className="w-full -ml-3 sm:w-full sm:flex sm:flex-1 sm:ml-4 sm:space-x-2 xl:ml-20 relative"> 
-                <div className='absolute search-svg bg-no-repeat lg:h-5 lg:w-5 lg:mt-2 lg:ml-3.5 md:h-5 md:w-5 md:mt-2 md:ml-3.5 sm:h-4 sm:w-4 sm:mt-2 sm:ml-3.5'></div>
+                {/* <div className='absolute search-svg bg-no-repeat lg:h-5 lg:w-5 lg:mt-2 lg:ml-3.5 md:h-5 md:w-5 md:mt-2 md:ml-3.5 sm:h-4 sm:w-4 sm:mt-2 sm:ml-3.5'></div> */}
+                <Search color="darkgray"  className='absolute  bg-no-repeat lg:h-5 lg:w-5 lg:mt-2 lg:ml-3.5 md:h-5 md:w-5 md:mt-2 md:ml-3.5 sm:h-4 sm:w-4 sm:mt-2 sm:ml-3.5' size={3} />
                 <input
                     type="text"
                     placeholder="Search Re-Serve"

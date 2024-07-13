@@ -17,9 +17,9 @@ const onSubmit = async () => {
       email: 'dev2@gmail.com',
       password: '12345678',
     });
-    console.log(response)
+    console.log(response);
   } catch (error) {
-    console.log('Error',error)
+    console.log('Error', error);
   }
 };
 
