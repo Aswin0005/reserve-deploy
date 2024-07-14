@@ -1,10 +1,19 @@
 import { NextResponse } from 'next/server';
 import Restaurant from '../../../../../models/restaurant';
 import { dbConnect } from '../../../../../utils/dbConnect';
-const path = require('path')
+const path = require('path');
 import { writeFile } from 'fs';
+import { cookiesParse } from '../../../../../utils/cookies';
+import UnAuthorizedError from '../../../../../errors/unauthorizedError';
 
 export async function POST(request) {
+  const isAuthenticated = await cookiesParse(request);
+  console.log('IsAuthorized',isAuthenticated) 
+
+  if (!isAuthenticated || isAuthenticated.role === 'user') {
+    return UnAuthorizedError('Not Authorized');
+  }
+
   try {
     await dbConnect();
 
@@ -28,9 +37,11 @@ export async function POST(request) {
 
     const dbRestaurant = {
       name: await data.get('name'),
+      description: await data.get('description'),
       location: await data.get('location'),
       mobileno: await data.get('mobileno'),
       imageurl: `/${file.name}`,
+      user: isAuthenticated._id,
     };
 
     const product = await Restaurant.create(dbRestaurant);

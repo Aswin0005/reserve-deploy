@@ -6,6 +6,10 @@ const RestaurantSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Must Provide Restaurant Name'],
     },
+    description: {
+      type: String,
+      required: [true, 'Must Provide Restaurant Description'],
+    },
     location: {
       type: String,
       required: [true, 'Must Provide Restaurant Address'],
@@ -17,6 +21,7 @@ const RestaurantSchema = new mongoose.Schema(
     mobileno: {
       type: Number,
       required: [true, 'Must Provide Phone Number'],
+      unique: true,
     },
     rating: {
       type: Number,

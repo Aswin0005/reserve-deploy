@@ -15,8 +15,9 @@ const inter400 = Inter({
 export default function Home() {
   const [formData, setFormData] = useState({
     name: '',
-    address: '',
-    phoneno : null,
+    description: '',
+    location: '',
+    phoneno: null,
     file: {},
   });
 
@@ -28,12 +29,20 @@ export default function Home() {
       const data = new FormData();
 
       data.append('name', formData.name);
-      data.append('location', formData.address);
+      data.append('description', formData.description);
+      data.append('location', formData.location);
       data.append('mobileno', formData.phoneno);
       data.append('file', formData.file);
 
       console.log('Form Data', data);
       await axiosApi.post('/store/create-store', data);
+      setFormData({
+        name: '',
+        description: '',
+        location: '',
+        phoneno: '',
+        file: {},
+      });
       // handle the error
       if (!res.ok) throw new Error(await res.text());
     } catch (e) {
@@ -41,6 +50,19 @@ export default function Home() {
       console.error(e);
     }
   };
+
+  const getLocation = (e) => {
+    e.preventDefault();
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        setFormData({
+          ...formData,
+          location: `${position.coords.latitude}-${position.coords.longitude}`,
+        });
+      });
+    }
+  };
+
   return (
     <main
       className={`${inter400.className} w-screen h-screen flex justify-center items-center bg-green-700 `}
@@ -66,24 +88,32 @@ export default function Home() {
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           />
         </span>
-
-        {/* Restaurant Details*/}
+        {/* Description */}
         <span className="flex flex-col gap-1">
-          <label htmlFor="address" className="font-semibold text-lg">
-            Address
+          <label htmlFor="desc" className="font-semibold text-lg">
+            Restaurant Description
           </label>
           <input
             type="text"
-            placeholder="Store Address"
-            id="address"
+            placeholder="Food Description"
+            id="desc"
             className="w-3/4 h-8 border-[1px] rounded-md px-2 "
-            value={formData.address}
+            value={formData.description}
             onChange={(e) =>
-              setFormData({ ...formData, address: e.target.value })
+              setFormData({ ...formData, description: e.target.value })
             }
           />
         </span>
 
+        {/* Restaurant Details*/}
+        <span className="flex flex-col gap-1">
+          <label htmlFor="address" className="font-semibold text-lg">
+            Location
+          </label>
+          <button className="border-2" onClick={getLocation}>
+            Get Current Location
+          </button>
+        </span>
 
         {/*Phone Number */}
         <span className="flex flex-col gap-1">
@@ -97,7 +127,7 @@ export default function Home() {
             className="w-3/4 h-8 border-[1px] rounded-md px-2 "
             value={formData.phoneno}
             onChange={(e) =>
-              setFormData({ ...formData, phoneno : e.target.value })
+              setFormData({ ...formData, phoneno: e.target.value })
             }
           />
         </span>
