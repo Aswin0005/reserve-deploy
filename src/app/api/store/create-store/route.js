@@ -5,10 +5,11 @@ const path = require('path');
 import { writeFile } from 'fs';
 import { cookiesParse } from '../../../../../utils/cookies';
 import UnAuthorizedError from '../../../../../errors/unauthorizedError';
+import BadRequestError from '../../../../../errors/badRequestErrror';
 
 export async function POST(request) {
   const isAuthenticated = await cookiesParse(request);
-  console.log('IsAuthorized',isAuthenticated) 
+  console.log('IsAuthorized', isAuthenticated);
 
   if (!isAuthenticated || isAuthenticated.role === 'user') {
     return UnAuthorizedError('Not Authorized');
@@ -16,6 +17,14 @@ export async function POST(request) {
 
   try {
     await dbConnect();
+
+    const isAlreadyCreated = await Restaurant.findOne({
+      user: isAuthenticated._id,
+    });
+
+    if (isAlreadyCreated) {
+      return BadRequestError('Restaurant Already Created');
+    }
 
     //Paring the data from client
     const data = await request.formData();
@@ -39,6 +48,8 @@ export async function POST(request) {
       name: await data.get('name'),
       description: await data.get('description'),
       location: await data.get('location'),
+      address: await data.get('address'),
+      pickuptime: await data.get('pickuptime'),
       mobileno: await data.get('mobileno'),
       imageurl: `/${file.name}`,
       user: isAuthenticated._id,

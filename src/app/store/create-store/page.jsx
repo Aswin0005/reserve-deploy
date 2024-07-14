@@ -17,6 +17,9 @@ export default function Home() {
     name: '',
     description: '',
     location: '',
+    address : '',
+    pickupstarttime: '',
+    pickupendtime: '',
     phoneno: null,
     file: {},
   });
@@ -30,7 +33,12 @@ export default function Home() {
 
       data.append('name', formData.name);
       data.append('description', formData.description);
+      data.append('address', formData.address);
       data.append('location', formData.location);
+       data.append(
+         'pickuptime',
+         `${formData.pickupstarttime}-${formData.pickupendtime}`
+       );
       data.append('mobileno', formData.phoneno);
       data.append('file', formData.file);
 
@@ -40,7 +48,10 @@ export default function Home() {
         name: '',
         description: '',
         location: '',
-        phoneno: '',
+        address: '',
+        pickupstarttime: '',
+        pickupendtime: '',
+        phoneno: null,
         file: {},
       });
       // handle the error
@@ -57,7 +68,7 @@ export default function Home() {
       navigator.geolocation.getCurrentPosition((position) => {
         setFormData({
           ...formData,
-          location: `${position.coords.latitude}-${position.coords.longitude}`,
+          location: `${position.coords.latitude},${position.coords.longitude}`,
         });
       });
     }
@@ -95,7 +106,7 @@ export default function Home() {
           </label>
           <input
             type="text"
-            placeholder="Food Description"
+            placeholder="Restaurant Address"
             id="desc"
             className="w-3/4 h-8 border-[1px] rounded-md px-2 "
             value={formData.description}
@@ -105,7 +116,24 @@ export default function Home() {
           />
         </span>
 
-        {/* Restaurant Details*/}
+        {/* Address */}
+        <span className="flex flex-col gap-1">
+          <label htmlFor="address" className="font-semibold text-lg">
+            Restaurant Address
+          </label>
+          <input
+            type="text"
+            placeholder="Restaurant Address"
+            id="address"
+            className="w-3/4 h-8 border-[1px] rounded-md px-2 "
+            value={formData.address}
+            onChange={(e) =>
+              setFormData({ ...formData, address: e.target.value })
+            }
+          />
+        </span>
+
+        {/* Restaurant Location Details*/}
         <span className="flex flex-col gap-1">
           <label htmlFor="address" className="font-semibold text-lg">
             Location
@@ -113,6 +141,35 @@ export default function Home() {
           <button className="border-2" onClick={getLocation}>
             Get Current Location
           </button>
+        </span>
+
+        {/* PickUp Time Between TakeAway */}
+        <span className="flex flex-col gap-1">
+          <label htmlFor="time" className="font-semibold text-lg">
+            PickUp Between
+          </label>
+          <span className="flex ">
+            <input
+              type="time"
+              placeholder="PickUp Time"
+              id="time"
+              className="w-2/4 h-8 border-[1px] rounded-md px-2 "
+              value={formData.pickupstarttime}
+              onChange={(e) =>
+                setFormData({ ...formData, pickupstarttime: e.target.value })
+              }
+            />
+            <input
+              type="time"
+              placeholder="PickUp Time"
+              id="time"
+              className="w-2/4 h-8 border-[1px] rounded-md px-2 "
+              value={formData.pickupendtime}
+              onChange={(e) =>
+                setFormData({ ...formData, pickupendtime: e.target.value })
+              }
+            />
+          </span>
         </span>
 
         {/*Phone Number */}

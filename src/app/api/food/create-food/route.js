@@ -7,23 +7,24 @@ import BadRequestError from '../../../../../errors/badRequestErrror';
 import { writeFile } from 'fs';
 const path = require('path');
 import Product from '../../../../../models/product';
+import Restaurant from '../../../../../models/restaurant';
 
 export async function POST(request) {
   //Check Whether is logged in Or not
-  //   const isAuthenticated = await cookiesParse(request);
+  const isAuthenticated = await cookiesParse(request);
 
-  //   //Onlyl if the user is a Restaurant owner, then product creation is Allowed
-  //   if (!isAuthenticated) {
-  //     return UnAuthorizedError('UnAuthenticated');
-  //   }
+  if (!isAuthenticated || isAuthenticated.role === 'user') {
+    return UnAuthorizedError('Not Authorized');
+  }
 
   //Connect To Database
   try {
     await dbConnect();
 
+    const restaurant = await Restaurant.findOne({ user: isAuthenticated._id });
     //Paring the data from client
     const data = await request.formData();
-    console.log('Data', data);
+
     const file = data.get('file');
     if (!file) {
       return BadRequestError('Must Include File');
@@ -31,7 +32,16 @@ export async function POST(request) {
 
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
-    console.log('Current', __dirname);
+
+    const dbProduct = {
+      name: await data.get('name'),
+      description: await data.get('description'),
+      price: await data.get('price'),
+      imageurl: `/${file.name}`,
+      restaurant: restaurant._id,
+    };
+
+    const product = await Product.create(dbProduct);
 
     //Move the incoming File(Image) into the Public Folder
     const imgPath = path.join(
@@ -39,17 +49,6 @@ export async function POST(request) {
       '../../../../../../public/' + `${file.name}`
     );
     await writeFile(imgPath, buffer, (err) => console.log(err));
-
-    console.log('Aaa Name', await data.get('name'));
-    const dbProduct = {
-      name: await data.get('name'),
-      description: await data.get('description'),
-      pickuptime: await data.get('pickuptime'),
-      price: await data.get('price'),
-      imageurl: `/${file.name}`,
-    };
-
-    const product = await Product.create(dbProduct);
 
     return NextResponse.json({ product }, { status: 200 });
   } catch (error) {

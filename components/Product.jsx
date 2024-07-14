@@ -24,8 +24,8 @@ function Product({ product }) {
                     <p className='text-sm'>{product.description}</p>
                     <div className='flex justify-between'>
                         <div className='flex gap-2 items-center'>
-                            <span className='line-through text-gray-500'>${product.oldPrice}</span>
-                            <span>${product.newPrice}</span>
+                            {/* <span className='line-through text-gray-500'>${product.oldPrice}</span> */}
+                            <span>₹{product.price}</span>
                         </div>
                         {/* <button className='mr-12 p-1 px-5 bg-green-700 rounded-full text-white'>Add</button> */}
                         {/* {cart.includes(product) ? (
@@ -37,7 +37,9 @@ function Product({ product }) {
                 </div>
                 <div className="flex justify-end">
                     <Image
-                        src={product.image}
+                        src={product.imageurl}
+                        width={160}
+                        height={160}
                         alt={product.name}
                         className="h-40 w-40 object-cover rounded-xl"
                     />
@@ -46,24 +48,6 @@ function Product({ product }) {
         </div>
     )
 }
-
-
-// Product.propTypes = {
-//     product: PropTypes.shape({
-//         id: PropTypes.number.isRequired,
-//         image: PropTypes.string.isRequired,
-//         name: PropTypes.string.isRequired,
-//         description: PropTypes.string.isRequired,
-//         pickupTime: PropTypes.string.isRequired,
-//         review: PropTypes.number.isRequired,
-//         newPrice: PropTypes.number.isRequired,
-//         oldPrice: PropTypes.number.isRequired,
-//         distance: PropTypes.number.isRequired,
-//         // Add other required properties here
-//     }).isRequired,
-//     cart: PropTypes.arrayOf(PropTypes.object).isRequired,
-//     setCart: PropTypes.func.isRequired,
-// };
 
 
 export default Product

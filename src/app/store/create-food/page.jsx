@@ -16,8 +16,6 @@ export default function Home() {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    pickupstarttime: '',
-    pickupendtime: '',
     price: '',
     file: {},
   });
@@ -31,17 +29,16 @@ export default function Home() {
 
       data.append('name', formData.name);
       data.append('description', formData.description);
-      data.append(
-        'pickuptime',
-        `${formData.pickupstarttime}-${formData.pickupendtime}`
-      );
       data.append('price', formData.price);
       data.append('file', formData.file);
-
-      console.log('Form Data', data);
       await axiosApi.post('/food/create-food', data);
-      // handle the error
-      if (!res.ok) throw new Error(await res.text());
+
+      setFormData({
+        name: '',
+        description: '',
+        price: '',
+        file: {},
+      });
     } catch (e) {
       // Handle errors here
       console.error(e);
@@ -88,35 +85,6 @@ export default function Home() {
               setFormData({ ...formData, description: e.target.value })
             }
           />
-        </span>
-
-        {/* PickUp Time Between TakeAway */}
-        <span className="flex flex-col gap-1">
-          <label htmlFor="time" className="font-semibold text-lg">
-            PickUp Between
-          </label>
-          <span className="flex ">
-            <input
-              type="time"
-              placeholder="PickUp Time"
-              id="time"
-              className="w-2/4 h-8 border-[1px] rounded-md px-2 "
-              value={formData.pickupstarttime}
-              onChange={(e) =>
-                setFormData({ ...formData, pickupstarttime: e.target.value })
-              }
-            />
-            <input
-              type="time"
-              placeholder="PickUp Time"
-              id="time"
-              className="w-2/4 h-8 border-[1px] rounded-md px-2 "
-              value={formData.pickupendtime}
-              onChange={(e) =>
-                setFormData({ ...formData, pickupendtime: e.target.value })
-              }
-            />
-          </span>
         </span>
 
         {/* Price */}

@@ -19,7 +19,7 @@ function AllStores() {
   useEffect(() => {
     const fetchAllData = async () => {
       try {
-        const { data } = await axiosApi.get('/food/get-food');
+        const { data } = await axiosApi.get('/store/get-store');
         setRestaurantData(data);
       } catch (error) {
         throw new Error('Error Fetching Data ', error);

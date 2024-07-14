@@ -18,6 +18,10 @@ const RestaurantSchema = new mongoose.Schema(
       type: String,
       default: 'no-image',
     },
+    pickuptime: {
+      type: String,
+      required: [true, 'Must Provide Product Pickup time'],
+    },
     mobileno: {
       type: Number,
       required: [true, 'Must Provide Phone Number'],

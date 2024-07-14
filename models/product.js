@@ -11,10 +11,6 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       maxlength: 999,
     },
-    pickuptime: {
-      type: String,
-      required: [true, 'Must Provide Product Pickup time'],
-    },
     price: {
       type: Number,
       required: [true, 'Must Provide Price'],
