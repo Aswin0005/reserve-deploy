@@ -3,14 +3,6 @@ import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-import biryani_banner from '../../../../public/a_biryani.jpg';
-import g_noodles from '../../../../public/g_noodles.jpg';
-import c_pizza from '../../../../public/c_pizza.jpg';
-import e_dosa from '../../../../public/e_dosa.jpg';
-import h_rolls from '../../../../public/h_rolls.jpg';
-
-import fav_false from '../../../../public/fav_false.png';
-import fav_true from '../../../../public/fav_true.png';
 import star_review from '../../../../public/star_review.png';
 
 // pages/_app.js
@@ -33,7 +25,6 @@ import Header from '../../../../components/Header';
 const axiosApi = axios.create({
   baseURL: 'http://localhost:3000/api',
 });
-
 
 const SingleDish = () => {
   const params = useParams();
@@ -63,24 +54,10 @@ const SingleDish = () => {
         throw new Error('Error Fetching Data ', error);
       }
     };
+      fetchDishDetails(params.id);
 
-    fetchDishDetails(params.id);
   }, []);
 
-  // const [selectedRestaurantId /*  setSelectedRestaurantId */] = useState('1');
-  // const selectedRestaurant = data.find(
-  //   (item) => item.id === selectedRestaurantId
-  // );
-
-  // if (!selectedRestaurant)
-  //   return (
-  //     <p className="h-screen flex justify-center items-center">
-  //       Restaurant not found!
-  //     </p>
-  //   );
-
-  console.log('State', restaurantDetails.latitude);
-  console.log('State', restaurantDetails.longitude);
   return (
     <main>
       {isloading ? (

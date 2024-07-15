@@ -26,8 +26,9 @@ const cookiesParse = async (request) => {
   try {
     await dbConnect();
     if (accessToken) {
-      const user = verifyJWT(accessToken);
-      return user;
+      const { payload } = verifyJWT(accessToken);
+      console.log('Normal', payload);
+      return payload;
     }
 
     const decodedRefToken = verifyJWT(refreshToken);
@@ -41,6 +42,7 @@ const cookiesParse = async (request) => {
     const tokenUser = await User.findOne({ _id: existingToken.user }).select(
       '_id name email role'
     );
+    console.log('TokenUser', tokenUser);
     sendCookies(tokenUser, existingToken);
     return tokenUser;
   } catch (error) {
