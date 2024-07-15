@@ -8,12 +8,24 @@ const axiosApi = axios.create({
   baseURL: 'http://localhost:3000/api',
 });
 
-function Product({ product }) {
+function Product({ product, resId }) {
+  const [dbCart, setDbCart] = useState({});
   const [cart, setCart] = useState({});
   const isFirstRender = useRef(true);
 
-  const handleCardAdd = (id) => {
-    setCart({ productId: id, quantity: 1 });
+  const handleCardAdd = (id, quantity) => {
+    setCart({ productId: id, quantity: quantity, restaurantId: resId });
+
+    setDbCart((prevCart) => ({
+      ...prevCart,
+      items: !isEmpty(prevCart)
+        ? prevCart.items.map((item) =>
+            item.productId === id
+              ? { ...item, quantity: item.quantity + quantity }
+              : item
+          )
+        : [{ productId: id, quantity: quantity }],
+    }));
   };
 
   //To Check is Object is Empty or not
@@ -28,20 +40,40 @@ function Product({ product }) {
   }
 
   useEffect(() => {
-    console.log(isFirstRender.current);
+    const cartDbFetch = async () => {
+      try {
+        console.log('Updating.....');
+        const { data } = await axiosApi.get('/cart/get-cart');
+        setDbCart(data);
+      } catch (error) {
+        console.log('Cart Updating Error', error);
+      }
+    };
+    //Fetch only When Cart has Something
+    console.log('isFirst', isFirstRender.current);
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      cartDbFetch();
+    }
+  }, []);
+
+  //Update DB When change is made
+  useEffect(() => {
     const updateDbCart = async () => {
       try {
         const { data } = await axiosApi.post('/cart', cart);
-        console.log('Updated Card', data);
+        console.log('Updated Data', data);
+        setDbCart(data);
       } catch (error) {
         console.log('Error Updating Cart', error);
       }
     };
-
+    console.log('CArt', cart);
     if (!isEmpty(cart)) {
       updateDbCart();
     }
   }, [cart]);
+
 
   return (
     <div>
@@ -62,12 +94,23 @@ function Product({ product }) {
                             <button onClick={removeCart} className='mr-12 p-1 px-5 border font-semibold border-green-700 text-green-700 rounded-full '>Remove</button>
                         ) : <button onClick={addCart} className='mr-12 p-1 px-5 bg-green-700 rounded-full text-white font-semibold' >Add</button>
                         } */}
+
+            <button onClick={() => handleCardAdd(product._id, -1)}>
+              Minus
+            </button>
             <button
               className="mr-12 p-1 px-5 bg-green-700 rounded-full text-white font-semibold"
-              onClick={() => handleCardAdd(product._id)}
+              onClick={() => handleCardAdd(product._id, 1)}
             >
-              Add
+              {isEmpty(dbCart)
+                ? 'Add'
+                : dbCart.items.map((e) => {
+                    if (e.productId === product._id) {
+                      return e.quantity;
+                    }
+                  })}
             </button>
+            <button onClick={() => handleCardAdd(product._id, 1)}>Plus</button>
           </div>
         </div>
         <div className="flex justify-end">

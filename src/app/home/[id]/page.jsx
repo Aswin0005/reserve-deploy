@@ -1,6 +1,6 @@
 'use client';
 import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 
 import star_review from '../../../../public/star_review.png';
@@ -31,7 +31,7 @@ const SingleDish = () => {
   const [restaurantDetails, setRestauratDetails] = useState({});
   const [dishDetails, setDishDetails] = useState([]);
   const [isloading, setIsLoading] = useState(true);
-
+  const isFirstRender = useRef(true);
   useEffect(() => {
     const fetchDishDetails = async (id) => {
       try {
@@ -40,7 +40,6 @@ const SingleDish = () => {
           `/food/get-food-restaurant/${id}`
         );
         const location = data.location.split(',');
-        console.log(location);
         console.log('Restaurant', data);
         console.log('Product', productData.data);
         setRestauratDetails({
@@ -54,8 +53,10 @@ const SingleDish = () => {
         throw new Error('Error Fetching Data ', error);
       }
     };
+    if (isFirstRender.current) {
       fetchDishDetails(params.id);
-
+      isFirstRender.current = false;
+    }
   }, []);
 
   return (
@@ -157,7 +158,9 @@ const SingleDish = () => {
                 {dishDetails.map((product) => (
                   <Product
                     key={product.id}
-                    product={product} /*cart={cart} setCart={setCart}*/
+                    product={product}
+                    resId={params.id}
+                    /*cart={cart} setCart={setCart}*/
                   />
                 ))}
               </ul>

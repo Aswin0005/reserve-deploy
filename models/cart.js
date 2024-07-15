@@ -21,10 +21,15 @@ const CartSchema = new mongoose.Schema(
       required: true,
     },
     items: [CartItemSchema],
-    total : {
-      type : Number,
-      default : 0,
-    }
+    total: {
+      type: Number,
+      default: 0,
+    },
+    fromrestaurant: {
+      type: mongoose.Types.ObjectId,
+      ref: 'Restaurant',
+      required: true,
+    },
   },
   { timestamps: true }
 );

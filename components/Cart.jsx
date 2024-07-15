@@ -8,12 +8,13 @@ const axiosApi = axios.create({
 });
 
 const Cart = ({ cart }) => {
-  console.log('Cart', cart);
   //To Identify Pathname
   const currentPath = usePathname();
 
   const [dbCart, setDbCart] = useState({});
   const [currentCart, setCurrentCart] = useState({});
+  const [productDetails, setProductDetails] = useState({});
+  const resId = useRef('');
 
   const [isShow, setIsShow] = useState(false);
 
@@ -34,13 +35,21 @@ const Cart = ({ cart }) => {
       try {
         console.log('Updating.....');
         const { data } = await axiosApi.get('/cart/get-cart');
-        console.log('Fetch', data);
+        resId.current = data.fromrestaurant;
+        const productData = await axiosApi.get(
+          `/food/get-food-restaurant/${data.fromrestaurant}`
+        );
         setDbCart(data);
+        setProductDetails(productData.data);
       } catch (error) {
         console.log('Cart Updating Error', error);
       }
     };
-    cartDbFetch();
+    console.log('Cart', cart);
+    //Fetch only When Cart has Something
+    if (!isEmpty(cart) || cart === undefined) {
+      cartDbFetch();
+    }
   }, [cart]);
 
   //Display the Cart Component Only when the Pathname is /cart
@@ -60,6 +69,7 @@ const Cart = ({ cart }) => {
       }
     };
 
+    //Update Only when the Current Cart is Updated
     if (!isEmpty(currentCart)) {
       updateDbCart();
     }
@@ -67,7 +77,14 @@ const Cart = ({ cart }) => {
 
   //Handle Cart Update
   const handleQuantityUpdate = (id, quantity) => {
-    setCurrentCart({ productId: id, quantity: quantity });
+    console.log(resId.current);
+    setCurrentCart({
+      productId: id,
+      quantity: quantity,
+      restaurantId: resId.current,
+    });
+
+    //Updating Db cart immediately to reflect the updated Quantity on page
     setDbCart((prevCart) => ({
       ...prevCart,
       items: prevCart.items.map((item) =>
