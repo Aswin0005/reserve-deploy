@@ -45,26 +45,29 @@ export default function Home() {
     }
   };
   return (
+    <div className='backgroundgreen h-screen '>
+    <div className='h-14 text-3xl  text-green-700 font-bold p-4'>ReServe</div>
     <main
-      className={`${inter400.className} w-screen h-screen flex justify-center items-center bg-green-700 `}
+      className={`${inter400.className} w-screen mt-12 flex justify-center items-center   `}
     >
+      
       <form
         onSubmit={onSubmit}
-        className="flex flex-col border-[1px] rounded-lg p-6 bg-white shadow-lg gap-4"
+        className="flex flex-col border-[0px]  rounded-sm p-6 bg-white bg-opacity-20  shadow-lg gap-4"
       >
-        <div className="text-center font-bold text-2xl text-green-900">
+        <div className="text-center font-mono text-2xl text-black tracking-wide">
           Dish Details
         </div>
         {/* DishName */}
         <span className="flex flex-col gap-1">
-          <label htmlFor="name" className="font-semibold text-lg">
-            Dish name{' '}
+          <label htmlFor="name" className="font-custom1 text-lg tracking-wide">
+            Dish Name:{' '}
           </label>
           <input
             type="text"
             placeholder="Food Name"
             id="name"
-            className="w-3/4 h-8 border-[1px] rounded-md px-2 "
+            className="w-full h-8 border-[1px] rounded-sm px-2 font-sans  text-sm   bg-white bg-opacity-60 placeholder-slate-400 outline-none"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           />
@@ -72,14 +75,14 @@ export default function Home() {
 
         {/* Dish Description */}
         <span className="flex flex-col gap-1">
-          <label htmlFor="desc" className="font-semibold text-lg">
-            Dish Description
+          <label htmlFor="desc" className="font-custom1 text-lg tracking-wider">
+            Dish Description:
           </label>
           <input
             type="text"
             placeholder="Food Description"
             id="desc"
-            className="w-3/4 h-8 border-[1px] rounded-md px-2 "
+            className="w-full h-8 border-[1px] rounded-sm px-2 font-sans text-sm  bg-white bg-opacity-60 placeholder-slate-400 outline-none"
             value={formData.description}
             onChange={(e) =>
               setFormData({ ...formData, description: e.target.value })
@@ -89,14 +92,14 @@ export default function Home() {
 
         {/* Price */}
         <span className="flex flex-col gap-1">
-          <label htmlFor="price" className="font-semibold text-lg">
-            Dish Price
+          <label htmlFor="price" className="font-custom1 text-lg tracking-wider">
+            Dish Price:
           </label>
           <input
             type="text"
             placeholder="Food Price"
             id="price"
-            className="w-3/4 h-8 border-[1px] rounded-md px-2 "
+            className="w-full h-8 border-[0px] rounded-sm px-2 font-sans text-sm  bg-white bg-opacity-60 placeholder-slate-400 outline-none"
             value={formData.price}
             onChange={(e) =>
               setFormData({ ...formData, price: e.target.value })
@@ -106,8 +109,8 @@ export default function Home() {
 
         {/* File Upload */}
         <span className="flex flex-col gap-1">
-          <label htmlFor="file" className="font-semibold text-lg">
-            Dish Image
+          <label htmlFor="file" className="font-custom1 text-lg">
+            Dish Image:
           </label>
           <input
             type="file"
@@ -121,11 +124,12 @@ export default function Home() {
 
         <button
           type="submit"
-          className="border-[1px] p-2 bg-black text-white  font-semibold rounded-lg hover:bg-green-200 hover:text-green-800"
+          className="border-[0px] p-2 bg-black text-white  text-md  font-sans rounded-sm" /* hover:bg-white hover:text-green-700 hover: border-green-700 */
         >
           Submit
         </button>
       </form>
     </main>
+    </div>
   );
 }

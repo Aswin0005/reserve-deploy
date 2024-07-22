@@ -10,3 +10,17 @@
 .search-svg{
     background-image: url('/search.svg');
 }
+
+.backgroundgreen{
+    background-image: url('../../public/backgroundgreen.jpg');
+    background-position: center;
+    background-size: cover;
+    background-repeat: repeat;
+}
+.backgroundblue{
+    background-image: url('../../public/backgroundblue.jpg');
+    background-position: center; 
+    background-size: cover;
+    background-repeat: repeat;
+    /* background-position: 50px -320px ;     */
+}

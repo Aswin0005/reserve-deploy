@@ -9,7 +9,7 @@ const axiosApi = axios.create({
   baseURL: 'http://localhost:3000/api',
 });
 
-function Header() {
+function Header({totalUniqueItems}) {
   const handleLogOut = async () => {
     try {
         const response = await axiosApi.get('/logout')
@@ -43,8 +43,11 @@ function Header() {
         />
       </div>
 
-      <div className=" sm:ml-auto sm:mr-4 2xl:mr-10">
+      <div className=" sm:ml-auto sm:mr-4 2xl:mr-10 flex gap-1 ">
         <ShoppingCart size={20} color="green" />
+        {totalUniqueItems > 0 && (
+          <div className=' bg-green-700 px-2 rounded-full text-white text-sm'>{totalUniqueItems}</div>
+        )}
       </div>
 
       <div className="hidden sm:flex">

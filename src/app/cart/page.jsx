@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Cart from '../../../components/Cart';
+import Header from '../../../components/Header';
 
 const axiosApi = axios.create({
   baseURL: 'http://localhost:3000/api',
@@ -53,7 +54,9 @@ const CartPage = () => {
   //   </main>
   // );
 return(
-  <Cart/>
+  <>
+    <Cart/>
+  </>
 )
 };
 
