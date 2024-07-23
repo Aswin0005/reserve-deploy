@@ -89,10 +89,10 @@ function Product({ product, resId }) {
     <div>
       <li
         key={product._id}
-        className="flex items-start space-x-4 hover:shadow-xl"
+        className="flex items-start space-x-4 border-b-2 border-white hover:border-gray-300 rounded-lg p-3"
       >
         <div className="flex flex-col w-2/3 gap-3">
-          <p className="font-semibold">{product.name}</p>
+          <p className="font-semibold text-2xl ">{product.name}</p>
           <p className="text-sm">{product.description}</p>
           <div className="flex justify-between">
             <div className="flex gap-2 items-center">
@@ -104,23 +104,32 @@ function Product({ product, resId }) {
                             <button onClick={removeCart} className='mr-12 p-1 px-5 border font-semibold border-green-700 text-green-700 rounded-full '>Remove</button>
                         ) : <button onClick={addCart} className='mr-12 p-1 px-5 bg-green-700 rounded-full text-white font-semibold' >Add</button>
                         } */}
-            {currentCartQuantity(product._id) !== 'Add' && (
-              <button onClick={() => handleCardAdd(product._id, -1)}>
-                Minus
-              </button>
-            )}
 
-            <button
-              className="mr-12 p-1 px-5 bg-green-700 rounded-full text-white font-semibold"
-              onClick={() => handleCardAdd(product._id, 1)}
-            >
-              {`${currentCartQuantity(product._id)}`}
-            </button>
-            {currentCartQuantity(product._id) !== 'Add' && (
-              <button onClick={() => handleCardAdd(product._id, 1)}>
-                Plus
+            <div className="space-x-2 mr-3">
+              {currentCartQuantity(product._id) !== 'Add' && (
+                <button
+                  className="px-2 bg-green-700 text-slate-50 rounded-sm"
+                  onClick={() => handleCardAdd(product._id, -1)}
+                >
+                  -
+                </button>
+              )}
+              <button
+                /* className="mr-12 p-1 px-5 bg-green-700 rounded-full text-white font-semibold" */
+                className="px-2 bg-slate-100"
+                onClick={() => handleCardAdd(product._id, 1)}
+              >
+                {`${currentCartQuantity(product._id)}`}
               </button>
-            )}
+              {currentCartQuantity(product._id) !== 'Add' && (
+                <button
+                  className="px-2 bg-green-700 text-slate-50 rounded-sm"
+                  onClick={() => handleCardAdd(product._id, 1)}
+                >
+                  +
+                </button>
+              )}
+            </div>
           </div>
         </div>
         <div className="flex justify-end">
@@ -133,7 +142,7 @@ function Product({ product, resId }) {
           />
         </div>
       </li>
-      <Cart cart={cart} />
+      {/* <Cart cart={cart} /> */}
     </div>
   );
 }

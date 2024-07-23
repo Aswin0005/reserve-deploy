@@ -119,7 +119,7 @@ const SingleDish = () => {
                     center={[
                       restaurantDetails.latitude,
                       restaurantDetails.longitude,
-                    ]}
+                    ]}  
                     zoom={14}
                     scrollWheelZoom={true}
                     style={{ width: '100%', height: '100%' }}
@@ -151,7 +151,7 @@ const SingleDish = () => {
               </div>
             </div>
             <div className="mt-16 px-2">
-              <p className="font-semibold text-2xl text-center mb-12">
+              <p className="font-semibold  text-2xl  text-center mb-12">
                 Food Menu
               </p>
               <ul className="grid grid-cols-2 gap-8">

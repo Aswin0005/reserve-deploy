@@ -9,12 +9,12 @@ const axiosApi = axios.create({
   baseURL: 'http://localhost:3000/api',
 });
 
-function Header() {
+function Header({ totalUniqueItems }) {
   const handleLogOut = async () => {
     try {
-        const response = await axiosApi.get('/logout')
+      const response = await axiosApi.get('/logout');
     } catch (error) {
-        throw new Error('Error Logging Out',error)
+      throw new Error('Error Logging Out', error);
     }
   };
   return (
@@ -43,9 +43,17 @@ function Header() {
         />
       </div>
 
-      <div className=" sm:ml-auto sm:mr-4 2xl:mr-10">
+      <Link
+        href={'/cart'}
+        className=" sm:ml-auto sm:mr-4 2xl:mr-10 flex gap-1 "
+      >
         <ShoppingCart size={20} color="green" />
-      </div>
+        {totalUniqueItems > 0 && (
+          <div className=" bg-green-700 px-2 rounded-full text-white text-sm">
+            {totalUniqueItems}
+          </div>
+        )}
+      </Link>
 
       <div className="hidden sm:flex">
         <button className="text-green-700 font-normal sm:text-sm bg-white border-2 border-green-700 sm:hover:bg-green-700 sm:hover:text-white sm:h-8 sm:w-20 sm:my-auto sm:px-3 sm:rounded-2xl sm:ml-2">

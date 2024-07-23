@@ -3,6 +3,9 @@ import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
+import Image from 'next/image';
+import Header from './Header';
+
 const axiosApi = axios.create({
   baseURL: 'http://localhost:3000/api',
 });
@@ -17,6 +20,28 @@ const Cart = ({ cart }) => {
   const resId = useRef('');
 
   const [isShow, setIsShow] = useState(false);
+
+  //finding finaltotal
+
+  const calculateFinalTotal = () => {
+    if (!dbCart || !dbCart.items) return 0; // Handle empty cart or missing data
+
+    const total = dbCart.items.reduce((acc, item) => {
+      const matchingProduct = productDetails.find(
+        (product) => product._id === item.productId
+      );
+      if(matchingProduct) return acc + (item.quantity * matchingProduct.price);
+      else return acc;
+    }, 0);
+
+    return total;
+  };
+
+  // total unique items
+  const calculateUniqueItems = () => {
+    return dbCart.items ? dbCart.items.length : 0;
+  };
+
 
   //To Check is Object is Empty or not
   function isEmpty(obj) {
@@ -95,17 +120,28 @@ const Cart = ({ cart }) => {
     }));
   };
 
-  return (
+  //console log 
+  console.log(productDetails);
+ /* 
+return (
     <main>
       {isShow &&
         (isEmpty(dbCart) ? (
           <div>Empty Cart</div>
+          
         ) : (
           <ul>
-            {dbCart.items?.map((e, i) => (
+
+            {dbCart.items?.map((e, i) => {
+              const matchingProduct = productDetails.find((product) => product._id === e.productId);
+              {console.log(dbCart.item)}
+              {if(e.quantity>0){
+              return(
               <div key={i}>
                 <li className="font-bold"></li>
-                {e.productId}
+                {e.productId} 
+                {/* <Image src={matchingProduct.imageurl} height={100} width={100} alt={matchingProduct.name} /> *}
+                {console.log(e)}
                 <button
                   className="ml-4"
                   onClick={() => handleQuantityUpdate(e.productId, -1)}
@@ -117,12 +153,90 @@ const Cart = ({ cart }) => {
                 <button onClick={() => handleQuantityUpdate(e.productId, 1)}>
                   Plus
                 </button>
+
+                {/* <div>{matchingProduct.price} total: {e.quantity*matchingProduct.price}</div>
+                <div>{matchingProduct.name}</div> *}
+
+                <div>Final total: </div>
+              
               </div>
-            ))}
+              )}}
+            })}
           </ul>
+        ))}   
+    </main>
+  );
+*/
+
+  return (
+    <>
+    <Header totalUniqueItems={calculateUniqueItems()}/>     
+    <main>
+      {isShow &&
+        (isEmpty(dbCart) ? (
+          <div>Empty Cart</div>
+        ) : (
+          <div className="py-4 lg:px-64">
+            <div className="text-3xl font-semibold text-black pl-9 py-4 rounded-md text-center">
+              Cart Products
+            </div>
+            {console.log(dbCart.items.length)}
+            {dbCart.items?.map((e, i) => {
+              const matchingProduct = productDetails.find(
+                (product) => product._id === e.productId
+              );
+              if (e.quantity > 0 ) {
+                return (
+                  <div key={i} className="container mx-auto mt-3   p-2 border-l-4 border-green-700  bg-gray-50 ">
+                    <div className="flex flex-col md:flex-row justify-between items-center  space-y-4 md:space-y-0 md:space-x-10">
+                      <div className="flex items-center space-x-4">
+                        <Image
+                          src={matchingProduct.imageurl}
+                          height={100}
+                          width={100}
+                          alt={matchingProduct.name}
+                          className='rounded-md'
+                        />
+                        <div className="text-2xl  " >
+                          <div>{matchingProduct.name}</div>
+
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <div className="flex items-center space-x-2 mr-3">
+                          <button className="px-2 bg-green-700 text-slate-50 rounded-sm" onClick={() => handleQuantityUpdate(e.productId, -1)}>
+                            -
+                          </button>
+                          <div className="px-2 bg-slate-100"> {e.quantity}</div>
+                          <button className="px-2 bg-green-700 text-slate-50 rounded-sm" onClick={() => handleQuantityUpdate(e.productId, 1)}>
+                            +
+                          </button>
+                        </div>
+                        <div className="text-2xl p-3 w-20">
+                          {/* ₹{e.quantity * matchingProduct.price} */}
+                          ₹{matchingProduct.price}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                
+                );
+              }
+              return null; 
+            })}
+
+            <div className="flex justify-end p-4 text-3xl md:mr-[105px] lg:mr-auto md:ml-28 sm:mr-16 ">
+              <span className="">Total:</span>
+              <div className="pl-3 ml-7 font-semibold">₹{ calculateFinalTotal() }</div>
+            </div>
+          </div>
         ))}
     </main>
+    </>
   );
 };
 
+
+
 export default Cart;
+
