@@ -22,6 +22,9 @@ export async function POST(request) {
 
       if (productIndex > -1) {
         cart.items[productIndex].quantity += quantity;
+        if (cart.items[productIndex].quantity === 0) {
+          cart.items.splice(productIndex, 1);
+        }
         cart.total += quantity;
         cart.fromrestaurant = restaurantId;
       } else {
@@ -29,7 +32,10 @@ export async function POST(request) {
         cart.total += quantity;
         cart.fromrestaurant = restaurantId;
       }
-
+      
+      if(cart.items.length === 0) {
+       await Cart.findOneAndDelete({ _id : cart._id})
+      }
       await cart.save();
       responseCart = cart;
       console.log('Cart updated successfully');
@@ -41,7 +47,6 @@ export async function POST(request) {
         fromrestaurant: restaurantId,
       };
       const newCart = await Cart.create(cartContent);
-      console.log('New Cart', newCart);
       responseCart = newCart;
       console.log('New cart created and product added');
     }

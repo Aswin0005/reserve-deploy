@@ -14,8 +14,6 @@ function Product({ product, resId }) {
   const isFirstRender = useRef(true);
 
   const handleCardAdd = (id, quantity) => {
-    setCart({ productId: id, quantity: quantity, restaurantId: resId });
-
     setDbCart((prevCart) => ({
       ...prevCart,
       items: !isEmpty(prevCart)
@@ -26,6 +24,7 @@ function Product({ product, resId }) {
           )
         : [{ productId: id, quantity: quantity }],
     }));
+    setCart({ productId: id, quantity: quantity, restaurantId: resId });
   };
 
   //To Check is Object is Empty or not
@@ -74,6 +73,17 @@ function Product({ product, resId }) {
     }
   }, [cart]);
 
+  const currentCartQuantity = (currProductId) => {
+    let resultQuantity;
+    if (!isEmpty(dbCart)) {
+      resultQuantity = dbCart.items.find((e) => e.productId === currProductId);
+    }
+    return resultQuantity
+      ? resultQuantity.quantity !== 0
+        ? resultQuantity.quantity
+        : 'Add'
+      : 'Add';
+  };
 
   return (
     <div>
@@ -94,23 +104,23 @@ function Product({ product, resId }) {
                             <button onClick={removeCart} className='mr-12 p-1 px-5 border font-semibold border-green-700 text-green-700 rounded-full '>Remove</button>
                         ) : <button onClick={addCart} className='mr-12 p-1 px-5 bg-green-700 rounded-full text-white font-semibold' >Add</button>
                         } */}
+            {currentCartQuantity(product._id) !== 'Add' && (
+              <button onClick={() => handleCardAdd(product._id, -1)}>
+                Minus
+              </button>
+            )}
 
-            <button onClick={() => handleCardAdd(product._id, -1)}>
-              Minus
-            </button>
             <button
               className="mr-12 p-1 px-5 bg-green-700 rounded-full text-white font-semibold"
               onClick={() => handleCardAdd(product._id, 1)}
             >
-              {isEmpty(dbCart)
-                ? 'Add'
-                : dbCart.items.map((e) => {
-                    if (e.productId === product._id) {
-                      return e.quantity;
-                    }
-                  })}
+              {`${currentCartQuantity(product._id)}`}
             </button>
-            <button onClick={() => handleCardAdd(product._id, 1)}>Plus</button>
+            {currentCartQuantity(product._id) !== 'Add' && (
+              <button onClick={() => handleCardAdd(product._id, 1)}>
+                Plus
+              </button>
+            )}
           </div>
         </div>
         <div className="flex justify-end">
