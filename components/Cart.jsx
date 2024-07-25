@@ -122,51 +122,7 @@ const Cart = ({ cart }) => {
 
   //console log 
   console.log(productDetails);
- /* 
-return (
-    <main>
-      {isShow &&
-        (isEmpty(dbCart) ? (
-          <div>Empty Cart</div>
-          
-        ) : (
-          <ul>
 
-            {dbCart.items?.map((e, i) => {
-              const matchingProduct = productDetails.find((product) => product._id === e.productId);
-              {console.log(dbCart.item)}
-              {if(e.quantity>0){
-              return(
-              <div key={i}>
-                <li className="font-bold"></li>
-                {e.productId} 
-                {/* <Image src={matchingProduct.imageurl} height={100} width={100} alt={matchingProduct.name} /> *}
-                {console.log(e)}
-                <button
-                  className="ml-4"
-                  onClick={() => handleQuantityUpdate(e.productId, -1)}
-                >
-                  Minus
-                </button>
-                <button className="font-bold">{e.quantity}</button>
-
-                <button onClick={() => handleQuantityUpdate(e.productId, 1)}>
-                  Plus
-                </button>
-
-                {/* <div>{matchingProduct.price} total: {e.quantity*matchingProduct.price}</div>
-                <div>{matchingProduct.name}</div> *}
-
-                <div>Final total: </div>
-              
-              </div>
-              )}}
-            })}
-          </ul>
-        ))}   
-    </main>
-  );
-*/
 
   return (
     <>

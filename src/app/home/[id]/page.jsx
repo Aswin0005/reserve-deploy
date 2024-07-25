@@ -28,9 +28,12 @@ const axiosApi = axios.create({
 
 const SingleDish = () => {
   const params = useParams();
+   const [dbCart, setDbCart] = useState({});
   const [restaurantDetails, setRestauratDetails] = useState({});
   const [dishDetails, setDishDetails] = useState([]);
   const [isloading, setIsLoading] = useState(true);
+  const [uniqueProducts, setUniqueProducts] = useState(0);
+
   const isFirstRender = useRef(true);
   useEffect(() => {
     const fetchDishDetails = async (id) => {
@@ -65,7 +68,7 @@ const SingleDish = () => {
         <div>Loading.....</div>
       ) : (
         <div>
-          <Header />
+          <Header totalUniqueItems={uniqueProducts} />
           <div className="m-8 mx-20">
             <div className="flex space-x-16">
               <div className="mb-0 max-w-3xl">
@@ -119,7 +122,7 @@ const SingleDish = () => {
                     center={[
                       restaurantDetails.latitude,
                       restaurantDetails.longitude,
-                    ]}  
+                    ]}
                     zoom={14}
                     scrollWheelZoom={true}
                     style={{ width: '100%', height: '100%' }}
@@ -156,12 +159,16 @@ const SingleDish = () => {
               </p>
               <ul className="grid grid-cols-2 gap-8">
                 {dishDetails.map((product) => (
-                  <Product
-                    key={product.id}
-                    product={product}
-                    resId={params.id}
-                    /*cart={cart} setCart={setCart}*/
-                  />
+                  <div key={product._id}>
+                    <Product
+                      
+                      product={product}
+                      resId={params.id}
+                      setUniqueProducts={setUniqueProducts}
+                      dbCart={dbCart}
+                      setDbCart={setDbCart}
+                    />
+                  </div>
                 ))}
               </ul>
             </div>

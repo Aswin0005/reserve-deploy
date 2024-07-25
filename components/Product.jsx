@@ -8,22 +8,30 @@ const axiosApi = axios.create({
   baseURL: 'http://localhost:3000/api',
 });
 
-function Product({ product, resId }) {
-  const [dbCart, setDbCart] = useState({});
+function Product({ product, resId, setUniqueProducts, dbCart, setDbCart }) {
+  // const [dbCart, setDbCart] = useState({});
   const [cart, setCart] = useState({});
   const isFirstRender = useRef(true);
 
   const handleCardAdd = (id, quantity) => {
-    setDbCart((prevCart) => ({
-      ...prevCart,
-      items: !isEmpty(prevCart)
-        ? prevCart.items.map((item) =>
-            item.productId === id
-              ? { ...item, quantity: item.quantity + quantity }
-              : item
-          )
-        : [{ productId: id, quantity: quantity }],
-    }));
+    console.log('Handle', dbCart);
+    if (isEmpty(dbCart)) {
+      setDbCart({ items: [{ productId: id, quantity: quantity }] });
+    } else {
+      const isExisting = dbCart.items.find((item) => item.productId === id);
+      setDbCart((prevCart) => ({
+        items: isExisting
+          ? prevCart.items.map((item) =>
+              item.productId === id
+                ? {
+                    ...item,
+                    quantity: item.quantity + quantity,
+                  }
+                : item
+            )
+          : [...prevCart.items, { productId: id, quantity: quantity }],
+      }));
+    }
     setCart({ productId: id, quantity: quantity, restaurantId: resId });
   };
 
@@ -38,10 +46,14 @@ function Product({ product, resId }) {
     return true;
   }
 
+  const calculateUniqueItems = async () => {
+    const uniqueProducts = dbCart?.items ? dbCart.items.length : 0;
+    setUniqueProducts(uniqueProducts);
+  };
+
   useEffect(() => {
     const cartDbFetch = async () => {
       try {
-        console.log('Updating.....');
         const { data } = await axiosApi.get('/cart/get-cart');
         setDbCart(data);
       } catch (error) {
@@ -49,7 +61,8 @@ function Product({ product, resId }) {
       }
     };
     //Fetch only When Cart has Something
-    console.log('isFirst', isFirstRender.current);
+
+    console.log('IsFirst', isFirstRender.current);
     if (isFirstRender.current) {
       isFirstRender.current = false;
       cartDbFetch();
@@ -61,17 +74,18 @@ function Product({ product, resId }) {
     const updateDbCart = async () => {
       try {
         const { data } = await axiosApi.post('/cart', cart);
-        console.log('Updated Data', data);
-        setDbCart(data);
       } catch (error) {
         console.log('Error Updating Cart', error);
       }
     };
-    console.log('CArt', cart);
     if (!isEmpty(cart)) {
       updateDbCart();
     }
   }, [cart]);
+
+  useEffect(() => {
+    calculateUniqueItems();
+  }, [dbCart]);
 
   const currentCartQuantity = (currProductId) => {
     let resultQuantity;
@@ -87,25 +101,15 @@ function Product({ product, resId }) {
 
   return (
     <div>
-      <li
-        key={product._id}
-        className="flex items-start space-x-4 border-b-2 border-white hover:border-gray-300 rounded-lg p-3"
-      >
+      <li className="flex items-center justify-between space-x-4 border-b-2 hover:shadow-xl rounded-lg p-4 shadow-md border-[1px] border-gray-200">
         <div className="flex flex-col w-2/3 gap-3">
           <p className="font-semibold text-2xl ">{product.name}</p>
-          <p className="text-sm">{product.description}</p>
           <div className="flex justify-between">
             <div className="flex gap-2 items-center">
-              {/* <span className='line-through text-gray-500'>${product.oldPrice}</span> */}
-              <span>₹{product.price}</span>
+              <span>{product.description}</span>
             </div>
-            {/* <button className='mr-12 p-1 px-5 bg-green-700 rounded-full text-white'>Add</button> */}
-            {/* {cart.includes(product) ? (
-                            <button onClick={removeCart} className='mr-12 p-1 px-5 border font-semibold border-green-700 text-green-700 rounded-full '>Remove</button>
-                        ) : <button onClick={addCart} className='mr-12 p-1 px-5 bg-green-700 rounded-full text-white font-semibold' >Add</button>
-                        } */}
 
-            <div className="space-x-2 mr-3">
+            <div className="space-x-2">
               {currentCartQuantity(product._id) !== 'Add' && (
                 <button
                   className="px-2 bg-green-700 text-slate-50 rounded-sm"
@@ -131,6 +135,7 @@ function Product({ product, resId }) {
               )}
             </div>
           </div>
+          <p>₹{product.price}</p>
         </div>
         <div className="flex justify-end">
           <Image

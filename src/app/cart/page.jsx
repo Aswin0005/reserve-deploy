@@ -35,24 +35,6 @@ const CartPage = () => {
   }, []);
 
   console.log('Cur', currentCart);
-  // return (
-  //   <main>
-  //     {isShow &&
-  //       (!currentCart ? (
-  //         <div>Empty Cart</div>
-  //       ) : (
-  //         <ul>
-  //           {currentCart.items?.map((e, i) => (
-  //             <div key={i}>
-  //               <li className="font-bold"></li>
-  //               {e.productId}
-  //               <li className="font-bold">{e.quantity}</li>
-  //             </div>
-  //           ))}
-  //         </ul>
-  //       ))}
-  //   </main>
-  // );
 return(
   <>
     <Cart/>

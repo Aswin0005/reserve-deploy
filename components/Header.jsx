@@ -17,6 +17,7 @@ function Header({ totalUniqueItems }) {
       throw new Error('Error Logging Out', error);
     }
   };
+
   return (
     <nav className=" whitespace-nowrap flex gap-6 bg-white h-14 items-center px-5 shadow-md sm:flex sm:bg-white sm:py-4 sm:px-4 sm:px-6 lg:px-8 sm:flex sm:items-center sm:justify-between sm:shadow-md  ">
       <h1 className="-ml-3 text-green-700 sm:text-2xl font-bold sm:mr-4">
