@@ -3,7 +3,6 @@ import { useParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 
-
 import star_review from '../../../../public/star_review.png';
 
 // pages/_app.js
@@ -30,7 +29,7 @@ const axiosApi = axios.create({
 
 const SingleDish = () => {
   const params = useParams();
-   const [dbCart, setDbCart] = useState({});
+  const [dbCart, setDbCart] = useState({});
   const [restaurantDetails, setRestauratDetails] = useState({});
   const [dishDetails, setDishDetails] = useState([]);
   const [isloading, setIsLoading] = useState(true);
@@ -67,7 +66,9 @@ const SingleDish = () => {
   return (
     <main>
       {isloading ? (
-        <div>Loading.....</div>
+        <div className="flex justify-center items-center h-screen">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-gray-900"></div>
+        </div>
       ) : (
         <div>
           <Header totalUniqueItems={uniqueProducts} />
@@ -156,26 +157,48 @@ const SingleDish = () => {
               </div>
             </div>
             <div className="mt-16 px-2">
-              <p className="font-semibold  text-2xl  text-center mb-12">
+              <p className="font-semibold  text-2xl  text-center mb-10">
                 Food Menu
               </p>
+              <p className="font-semibold  text-2xl  text-center mb-8">
+                Explore Our Surprise Meal Box!
+              </p>
+              <ul className="flex w-full justify-center items-center gap-4 my-4 ">
+                {dishDetails.map((product) =>
+                  product.role === 'box' ? (
+                    <div key={product._id}>
+                      <Product
+                        product={product}
+                        resId={params.id}
+                        setUniqueProducts={setUniqueProducts}
+                        dbCart={dbCart}
+                        setDbCart={setDbCart}
+                        role="box"
+                      />
+                    </div>
+                  ) : null
+                )}
+              </ul>
+
               <ul className="grid grid-cols-2 gap-8">
-                {dishDetails.map((product) => (
-                  <div key={product._id}>
-                    <Product
-                      
-                      product={product}
-                      resId={params.id}
-                      setUniqueProducts={setUniqueProducts}
-                      dbCart={dbCart}
-                      setDbCart={setDbCart}
-                    />
-                  </div>
-                ))}
+                {dishDetails.map(
+                  (product) =>
+                    product.role !== 'box' && (
+                      <div key={product._id}>
+                        <Product
+                          product={product}
+                          resId={params.id}
+                          setUniqueProducts={setUniqueProducts}
+                          dbCart={dbCart}
+                          setDbCart={setDbCart}
+                        />
+                      </div>
+                    )
+                )}
               </ul>
             </div>
           </div>
-          <ReviewSection  />
+          <ReviewSection />
         </div>
       )}
     </main>

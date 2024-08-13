@@ -8,7 +8,7 @@ const axiosApi = axios.create({
   baseURL: 'http://localhost:3000/api',
 });
 
-function Product({ product, resId, setUniqueProducts, dbCart, setDbCart }) {
+function Product({ product, resId, setUniqueProducts, dbCart, setDbCart,role }) {
   // const [dbCart, setDbCart] = useState({});
   const [cart, setCart] = useState({});
   const isFirstRender = useRef(true);
@@ -101,14 +101,29 @@ function Product({ product, resId, setUniqueProducts, dbCart, setDbCart }) {
 
   return (
     <div>
-      <li className="flex items-center justify-between space-x-4 border-b-2 hover:shadow-xl rounded-lg p-4 shadow-md border-[1px] border-gray-200">
-        <div className="flex flex-col w-2/3 gap-3">
+      <li
+        className={`${
+          role === 'box'
+            ? 'flex flex-col-reverse w-[300px] h-[450px]' // Add w-full to ensure it takes full available width
+            : 'flex items-center justify-between w-full' // Same here for consistency
+        } space-x-4 border-b-2 hover:shadow-xl rounded-lg p-4 shadow-md border-[1px] border-gray-200`}
+      >
+        <div
+          className={`${
+            role === 'box' ? 'h-[250px]' : 'flex flex-col'
+          } flex flex-col w-full md:w-2/3 gap-3`}
+        >
+          {' '}
+          {/* Adjusted width to full in small screens */}
           <p className="font-semibold text-2xl ">{product.name}</p>
-          <div className="flex justify-between">
+          <div
+            className={`${role === 'box' ? 'w-full' : 'flex justify-between'}`}
+          >
+            {' '}
+            {/* Set width full for role === 'box' */}
             <div className="flex gap-2 items-center">
               <span>{product.description}</span>
             </div>
-
             <div className="space-x-2 whitespace-nowrap">
               {currentCartQuantity(product._id) !== 'Add' && (
                 <button
@@ -137,7 +152,13 @@ function Product({ product, resId, setUniqueProducts, dbCart, setDbCart }) {
           </div>
           <p>₹{product.price}</p>
         </div>
-        <div className="flex justify-end">
+        <div
+          className={`${
+            role === 'box' ? 'w-full flex justify-center' : 'flex justify-end'
+          }`}
+        >
+          {' '}
+          {/* Centered image for 'box' */}
           <Image
             src={product.imageurl}
             width={160}
