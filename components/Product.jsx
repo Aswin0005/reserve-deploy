@@ -109,7 +109,7 @@ function Product({ product, resId, setUniqueProducts, dbCart, setDbCart }) {
               <span>{product.description}</span>
             </div>
 
-            <div className="space-x-2">
+            <div className="space-x-2 whitespace-nowrap">
               {currentCartQuantity(product._id) !== 'Add' && (
                 <button
                   className="px-2 bg-green-700 text-slate-50 rounded-sm"

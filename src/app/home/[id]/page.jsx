@@ -3,6 +3,7 @@ import { useParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 
+
 import star_review from '../../../../public/star_review.png';
 
 // pages/_app.js
@@ -19,6 +20,7 @@ import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 import Product from '../../../../components/Product';
 import Image from 'next/image';
 import Header from '../../../../components/Header';
+import ReviewSection from '../../../../components/ReviewSection';
 
 // import PropTypes from "prop-types";
 
@@ -173,6 +175,7 @@ const SingleDish = () => {
               </ul>
             </div>
           </div>
+          <ReviewSection  />
         </div>
       )}
     </main>

@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 
 import Image from 'next/image';
 import Header from './Header';
+import Banner from './Banner';
 
 const axiosApi = axios.create({
   baseURL: 'http://localhost:3000/api',
@@ -127,6 +128,7 @@ const Cart = ({ cart }) => {
   return (
     <>
     <Header totalUniqueItems={calculateUniqueItems()}/>     
+    <Banner />
     <main>
       {isShow &&
         (isEmpty(dbCart) ? (
@@ -158,8 +160,8 @@ const Cart = ({ cart }) => {
 
                         </div>
                       </div>
-                      <div className="flex items-center space-x-4">
-                        <div className="flex items-center space-x-2 mr-3">
+                      <div className="flex items-center space-x-4 ">
+                        <div className="flex items-center space-x-2 mr-3 ">
                           <button className="px-2 bg-green-700 text-slate-50 rounded-sm" onClick={() => handleQuantityUpdate(e.productId, -1)}>
                             -
                           </button>
@@ -183,7 +185,7 @@ const Cart = ({ cart }) => {
 
             <div className="flex justify-end p-4 text-3xl md:mr-[105px] lg:mr-auto md:ml-28 sm:mr-16 ">
               <span className="">Total:</span>
-              <div className="pl-3 ml-7 font-semibold">₹{ calculateFinalTotal() }</div>
+              <div className="pl-3 ml-7 font-semibold mb-16">₹{ calculateFinalTotal() }</div>
             </div>
           </div>
         ))}
