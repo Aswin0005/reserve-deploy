@@ -9,7 +9,7 @@ const axiosApi = axios.create({
   baseURL: 'http://localhost:3000/api',
 });
 
-const CartPage = () => {
+export default function CartPage() {
   const currentPath = usePathname();
 
   console.log('PathName', currentPath);
@@ -42,4 +42,3 @@ return(
 )
 };
 
-export default Cart;

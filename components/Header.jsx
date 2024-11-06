@@ -3,8 +3,7 @@ import { ShoppingCart, Menu } from 'feather-icons-react';
 import Link from 'next/link';
 import { Search } from 'react-feather';
 import axios from 'axios';
-import Error from 'next/error';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
 
 const axiosApi = axios.create({
@@ -13,24 +12,22 @@ const axiosApi = axios.create({
 
 function Header({ totalUniqueItems }) {
   const [isVisible, setIsVisible] = useState(true);
+  const [restaurant, setRestaurant] = useState('');
+  const [restaurantData, setRestaurantData] = useState([]);
+  const hotelListRef = useRef(null);
+
   const handleLogOut = async () => {
     try {
-      const response = await axiosApi.get('/logout');
+      await axiosApi.get('/logout');
     } catch (error) {
       throw new Error('Error Logging Out', error);
     }
   };
 
-  const [restaurant, setRestaurant] = useState('');
-  const [restaurantdata, setRestaurantData] = useState([]);
-  const handlesearch = document.getElementById('hotellist');
-  function handlesearching(e) {
-    if (handlesearch) {
-      if (e.target.value === '') {
-        handlesearch.style.display = 'none';
-      } else {
-        handlesearch.style.display = 'inline-block';
-      }
+  function handleSearching(e) {
+    if (hotelListRef.current) {
+      hotelListRef.current.style.display =
+        e.target.value === '' ? 'none' : 'inline-block';
     }
   }
 
@@ -50,11 +47,7 @@ function Header({ totalUniqueItems }) {
   useEffect(() => {
     const isUserExists = async () => {
       const { data } = await axiosApi.get('/currentUser');
-      if (data.status) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
+      setIsVisible(data.status);
     };
 
     isUserExists();
@@ -76,15 +69,17 @@ function Header({ totalUniqueItems }) {
           className="w-3/4 pl-10 pr-4 py-2 text-sm bg-slate-100 text-black rounded-lg focus:outline-none"
           onChange={(e) => {
             setRestaurant(e.target.value);
-            handlesearching(e);
+            handleSearching(e);
           }}
         />
         <div
-          id="hotellist"
+          ref={hotelListRef}
           className="absolute mt-2 w-full top-10 bg-white rounded-lg shadow-lg z-40 hidden max-h-72 overflow-y-scroll"
         >
-          {restaurantdata
-            .filter((hotel) => hotel.name.toLowerCase().includes(restaurant))
+          {restaurantData
+            .filter((hotel) =>
+              hotel.name.toLowerCase().includes(restaurant.toLowerCase())
+            )
             .map((item) => (
               <Link
                 href={`/home/${item._id}`}
